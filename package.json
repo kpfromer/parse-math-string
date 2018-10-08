@@ -1,0 +1,26 @@
+{
+  "name": "parse-math-string",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kyle Pfromer",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@types/lodash": "^4.14.116",
+    "@types/node": "^10.11.3",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^8.0.0",
+    "gulp-nodemon": "^2.2.1",
+    "gulp-typescript": "^5.0.0-alpha.3",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.1.1"
+  },
+  "dependencies": {
+    "lodash": "^4.17.11"
+  }
+}
