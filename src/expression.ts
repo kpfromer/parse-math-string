@@ -15,8 +15,12 @@ export class SymbolExpression {
 export abstract class FunctionExpression {
   constructor(
     public args: ExpressType[],
-    public solve: (...args: number[]) => number
+    public solve: (...args: number[]) => number,
+    public precedence: number = 2,
+    public associativity: 'left' | 'right' | 'both' = 'both',
   ) {}
+
+  abstract toString(): string;
 
   containsVariable(): boolean {
     return this.args.reduce((prevContainVar, arg) => {
@@ -69,6 +73,21 @@ export abstract class FunctionExpression {
     return val;
   }
 
+  getStringValue(val: ExpressType) {
+    if (val instanceof SymbolExpression) {
+      return val.name;
+    } else if (val instanceof FunctionExpression) {
+      // const evaluated = val.evaluate()
+      // if (isFunction(evaluated)) { // If it is a function
+      //   return evaluated(variables); // pass in variables values
+      // }
+      return val.toString();
+      // else its a number
+      // return evaluated;
+    }
+    return val;
+  }
+
   static evaluateExpressionOrNumber = (val: FunctionExpression | number): Function | number => {
     if (val instanceof FunctionExpression) {
       return val.evaluate();
@@ -103,19 +122,30 @@ export abstract class FunctionExpression {
 
 export abstract class Expression extends FunctionExpression {
   constructor(
-    a: ExpressType,
-    b: ExpressType,
-    solve: (a: number, b: number) => number
+    protected a: ExpressType,
+    protected b: ExpressType,
+    solve: (a: number, b: number) => number,
+    precedence: number = 2,
+    associativity: 'left' | 'right' | 'both' = 'left'
   ) {
     super([a, b], solve);
   }
+
+  getABString() {
+    let a = this.getStringValue(this.a).toString();
+    let b = this.getStringValue(this.b).toString();
+
+    if (this.a instanceof Expression && this.a.precedence < this.precedence) { // TODO: function
+      a = `(${a})`;
+    }
+
+    if (this.b instanceof Expression && this.b.precedence < this.precedence) { // TODO: function
+      b = `(${b})`;
+    }
+
+    return {
+      a,
+      b
+    }
+  }
 }
-
-// export abstract class Expression {
-
-//   constructor(
-//     public a: ExpressType,
-//     public b: ExpressType,
-//     private solve: (a: number, b: number) => number
-//   ) {}
-
